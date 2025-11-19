@@ -20,51 +20,59 @@ export default function Lobby({
   });
 
   return (
-    <div className="max-w-lg mx-auto bg-white p-4 rounded shadow">
-      <h1 className="text-2xl font-bold mb-4">Add Players</h1>
+    <div className="max-w-xl mx-auto mt-8 space-y-6">
+      <h1 className="text-3xl font-bold text-center">Americano Setup</h1>
 
-      <div className="space-y-2">
+      <div className="card space-y-4">
+        <h2 className="text-xl font-semibold">Add Player</h2>
+
         <input
-          placeholder="Name"
-          className="border p-2 w-full"
+          placeholder="Player Name"
+          className="input"
           value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
         />
 
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-3">
           <input
             type="number"
-            className="border p-2"
+            className="input"
+            placeholder="Offence"
             value={form.offence}
             onChange={(e) =>
               setForm({ ...form, offence: Number(e.target.value) })
             }
           />
+
           <input
             type="number"
-            className="border p-2"
+            className="input"
+            placeholder="Defence"
             value={form.defence}
             onChange={(e) =>
               setForm({ ...form, defence: Number(e.target.value) })
             }
           />
+
           <input
             type="number"
-            className="border p-2"
+            className="input"
+            placeholder="IQ"
             value={form.iq}
             onChange={(e) => setForm({ ...form, iq: Number(e.target.value) })}
           />
         </div>
 
         <button
-          className="bg-blue-600 text-white p-2 rounded w-full"
+          className="button"
           onClick={() => {
             if (!form.name) return;
+
             setPlayers([
               ...players,
               {
                 id: uuidv4(),
-                name: form.name,
+                name: form.name.trim(),
                 offence: form.offence,
                 defence: form.defence,
                 iq: form.iq,
@@ -74,6 +82,7 @@ export default function Lobby({
                   0.2 * form.iq,
               },
             ]);
+
             setForm({ name: "", offence: 50, defence: 50, iq: 50 });
           }}
         >
@@ -81,16 +90,23 @@ export default function Lobby({
         </button>
       </div>
 
-      <ul className="mt-4 space-y-1">
-        {players.map((p) => (
-          <li key={p.id} className="border-b pb-1">
-            {p.name} — O:{p.offence} D:{p.defence} IQ:{p.iq}
-          </li>
-        ))}
-      </ul>
+      <div className="card">
+        <h2 className="text-xl font-semibold mb-3">Players</h2>
+
+        <ul className="space-y-2">
+          {players.map((p) => (
+            <li key={p.id} className="p-2 rounded-md bg-gray-100">
+              <div className="font-semibold">{p.name}</div>
+              <div className="text-sm text-gray-600">
+                O:{p.offence} • D:{p.defence} • IQ:{p.iq}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <button
-        className="mt-6 bg-green-600 text-white p-2 rounded w-full"
+        className="button bg-green-600 hover:bg-green-700"
         onClick={() => {
           const matches = scheduleTournament(players, 1);
           onStart(matches);
